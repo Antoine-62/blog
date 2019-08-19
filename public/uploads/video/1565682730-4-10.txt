@@ -1,0 +1,36 @@
+ffmpeg version N-94377-g817235b195 Copyright (c) 2000-2019 the FFmpeg developers
+  built with gcc 9.1.1 (GCC) 20190716
+  configuration: --enable-gpl --enable-version3 --enable-sdl2 --enable-fontconfig --enable-gnutls --enable-iconv --enable-libass --enable-libdav1d --enable-libbluray --enable-libfreetype --enable-libmp3lame --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libopus --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libtheora --enable-libtwolame --enable-libvpx --enable-libwavpack --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libzimg --enable-lzma --enable-zlib --enable-gmp --enable-libvidstab --enable-libvorbis --enable-libvo-amrwbenc --enable-libmysofa --enable-libspeex --enable-libxvid --enable-libaom --enable-libmfx --enable-amf --enable-ffnvcodec --enable-cuvid --enable-d3d11va --enable-nvenc --enable-nvdec --enable-dxva2 --enable-avisynth --enable-libopenmpt
+  libavutil      56. 32.100 / 56. 32.100
+  libavcodec     58. 55.100 / 58. 55.100
+  libavformat    58. 30.100 / 58. 30.100
+  libavdevice    58.  9.100 / 58.  9.100
+  libavfilter     7. 58.100 /  7. 58.100
+  libswscale      5.  6.100 /  5.  6.100
+  libswresample   3.  6.100 /  3.  6.100
+  libpostproc    55.  6.100 / 55.  6.100
+Input #0, matroska,webm, from '1565682730-4-10.webm':
+  Metadata:
+    encoder         : QTmuxingAppLibWebM-0.0.1
+  Duration: N/A, start: -0.001000, bitrate: N/A
+    Stream #0:0(eng): Video: vp8, yuv420p(progressive), 640x360, SAR 1:1 DAR 16:9, 1k tbr, 1k tbn, 1k tbc (default)
+    Stream #0:1(eng): Audio: opus, 48000 Hz, mono, fltp (default)
+Stream mapping:
+  Stream #0:0 -> #0:0 (vp8 (native) -> vp9 (libvpx-vp9))
+  Stream #0:1 -> #0:1 (opus (native) -> opus (libopus))
+Press [q] to stop, [?] for help
+[libopus @ 000001fbc3afc840] No bit rate set. Defaulting to 64000 bps.
+[libvpx-vp9 @ 000001fbc3b534c0] v1.8.0-606-gd749bc7b3
+Output #0, webm, to 'uploads/video/1565682730-4-10.webm':
+  Metadata:
+    encoder         : Lavf58.30.100
+    Stream #0:0(eng): Video: vp9 (libvpx-vp9), yuv420p, 640x360 [SAR 1:1 DAR 16:9], q=-1--1, 1k fps, 1k tbn, 1k tbc (default)
+    Metadata:
+      encoder         : Lavc58.55.100 libvpx-vp9
+    Side data:
+      cpb: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: -1
+    Stream #0:1(eng): Audio: opus (libopus), 48000 Hz, mono, flt, 64 kb/s (default)
+    Metadata:
+      encoder         : Lavc58.55.100 libopus
+frame=   60 fps=0.0 q=0.0 size=       1kB time=00:00:05.78 bitrate=   1.1kbits/s speed=11.5x    frame=  131 fps=131 q=0.0 size=     131kB time=00:00:09.98 bitrate= 107.9kbits/s speed=9.94x    frame=  210 fps=139 q=0.0 size=     352kB time=00:00:17.22 bitrate= 167.3kbits/s speed=11.4x    frame=  299 fps=149 q=0.0 size=     475kB time=00:00:24.36 bitrate= 159.8kbits/s dup=0 drop=1 speed=12.1x    frame=  348 fps=139 q=0.0 size=     619kB time=00:00:27.36 bitrate= 185.3kbits/s dup=0 drop=1 speed=10.9x    frame=  407 fps=134 q=0.0 size=     619kB time=00:00:30.86 bitrate= 164.3kbits/s dup=0 drop=1 speed=10.2x    frame=  480 fps=136 q=0.0 size=     755kB time=00:00:35.62 bitrate= 173.7kbits/s dup=0 drop=1 speed=10.1x    frame=  569 fps=141 q=0.0 size=    1005kB time=00:00:41.82 bitrate= 196.9kbits/s dup=0 drop=1 speed=10.4x    frame=  648 fps=143 q=0.0 size=    1132kB time=00:00:46.98 bitrate= 197.4kbits/s dup=0 drop=1 speed=10.3x    frame=  718 fps=142 q=0.0 size=    1197kB time=00:00:52.34 bitrate= 187.4kbits/s dup=0 drop=1 speed=10.4x    frame=  765 fps=138 q=0.0 size=    1315kB time=00:00:56.20 bitrate= 191.7kbits/s dup=0 drop=1 speed=10.1x    frame=  839 fps=139 q=0.0 size=    1423kB time=00:01:01.56 bitrate= 189.4kbits/s dup=0 drop=1 speed=10.2x    frame=  920 fps=140 q=0.0 size=    1584kB time=00:01:07.12 bitrate= 193.3kbits/s dup=0 drop=1 speed=10.2x    frame=  992 fps=140 q=0.0 size=    1689kB time=00:01:12.06 bitrate= 192.0kbits/s dup=0 drop=1 speed=10.2x    frame= 1037 fps=137 q=0.0 size=    1845kB time=00:01:14.78 bitrate= 202.1kbits/s dup=0 drop=1 speed=9.89x    frame= 1092 fps=135 q=0.0 size=    1948kB time=00:01:19.02 bitrate= 202.0kbits/s dup=0 drop=1 speed= 9.8x    frame= 1151 fps=134 q=0.0 size=    2101kB time=00:01:23.16 bitrate= 206.9kbits/s dup=0 drop=1 speed= 9.7x    frame= 1207 fps=132 q=0.0 size=    2205kB time=00:01:28.36 bitrate= 204.5kbits/s dup=0 drop=1 speed=9.67x    frame= 1224 fps=127 q=0.0 size=    2205kB time=00:01:29.40 bitrate= 202.1kbits/s dup=0 drop=1 speed=9.26x    frame= 1252 fps=123 q=0.0 size=    2343kB time=00:01:31.08 bitrate= 210.7kbits/s dup=0 drop=1 speed=8.96x    frame= 1269 fps=120 q=0.0 Lsize=    2455kB time=00:01:31.88 bitrate= 218.8kbits/s dup=0 drop=1 speed=8.72x    
+video:1650kB audio:763kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 1.706501%
