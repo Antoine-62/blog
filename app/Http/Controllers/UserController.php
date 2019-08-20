@@ -23,10 +23,18 @@ require_once('C:/xampp/htdocs/blog/vendor/autoload.php');
 use FFMpeg;
 use App\url_aliases;
 use Hashids\Hashids;
+use App\Repositories\UserRepositoryInterface;
 
 
 class UserController extends Controller
 {
+	private $userRepository;
+	
+	 public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+	
 	public function IndexA() {
 		
         return view("user.BoardA");
@@ -47,39 +55,26 @@ class UserController extends Controller
     }
     public function DisplayUs() {
        
-	    $shares = User::all();
-		/*$shares = DB::table('users')->orderBy('id', 'desc')->get();*/
-		/*DB::table('users')->join('role_user', 'users.id', '=', 'role_user.user_id')
-		->join('roles', 'role_user.role_id', '=', 'roles.id')
-		->select('users.*', 'roles.description')->distinct()->get();*/
+	    $shares = $this->userRepository->all();
         return view('user.Displ-users', compact('shares'));
     }
 	
 	/*If the admin want to add a new user*/
 	public function storeUseradm(UserRequest $request) {
 		
-		$slug = str_slug($request->get('name'));
-		$uest=DB::table('users')->where('slug',$slug)->count();
-		$count=1;
-		while($uest>0)
-		{
-			$count = $count +1;
-			$count2 = '_'.$count;
-			$slug = str_slug($request->get('name')).$count2;
-			$uest=DB::table('users')->where('slug',$slug)->count();
-		}
 
-		$user = User::create([
-            'name' =>  $request->get('name'),
-            'email' => $request->get('email'),
-            'password' => Hash::make($request->get('password')),
-			'slug'=>$slug,
-        ]);
-		 $user->roles()->attach($request['type']);
+		$data = array();
+		$data[1]= $request->get('name');
+		$data[2]= $request->get('email');
+        $data[3]= Hash::make($request->get('password'));
+		$data[4] = $request['type'];
+		$this->userRepository->create($data);
+
+		
 		 
 	//	 Mail::to("antoine.landrieu62@gmail.com")->send(new ConfirmationEmail($user));
 
-	  Session::flash('message', 'Congratulations, you add a new member!'.$slug.'');
+	  Session::flash('message', 'Congratulations, you added a new member!');
 	  return redirect('display-User');
     }
 	
@@ -129,8 +124,8 @@ class UserController extends Controller
 			DB::table('permission')->where('id',$permission)->delete();
 			$permission = DB::table('permission')->where('user_id',$id)->value('id');
 		}
-	  $share =User::findOrFail($id);
-	  $share->delete();
+		
+	  $this->userRepository->delete($id);
 
 	  Session::flash('message', 'Congratulations, you deleted a member');
 	  return redirect()->back();
@@ -143,49 +138,18 @@ class UserController extends Controller
 		/*$hashids = new Hashids('',20);
 		$id = $hashids->decode($idd);*/
 		$idd = DB::table('users')->where('slug',$slug)->value('id');
-		$share = User::find($idd);
+		$share = $this->userRepository->find($idd);
 		return view('user.EditU', compact('share'));
 		
     }
 	
 	public function updateUser(UserRequest2 $request, $id) {
 		
-		$validator = Validator::make($request->all(), [
-        'Name'=>'required',
-        'Email'=> 'required',
-      ]);
-	  
-	  if ($validator->fails()) {
-        return redirect('UserEdit/'.$id)
-		->withInput($request->all)
-        ->withErrors($validator);
-		}
-		
-		$slug = str_slug($request->get('Name'));
-		$uest=DB::table('users')->where('slug',$slug)->count();
-		if(DB::table('users')->where('id',$id)->value('slug')==$slug)
-		{
-			$uest=$uest-1;
-		}
-		$count=1;
-		while($uest>0)
-		{
-			$count = $count +1;
-			$count2 = '_'.$count;
-			$slug = str_slug($request->get('Name')).$count2;
-			$uest=DB::table('users')->where('slug',$slug)->count();
-		}
-		
-      $share = User::find($id);
-      $share->name = $request->get('Name');
-      $share->email=$request->get('Email');
-	  $share->slug=$slug;
-	  if(null !=$request->get('type'))
-	  {
-		  $products=DB::table('role_user')->where('user_id', $id)->delete();
-		  $share->roles()->attach($request['type']);
-	  }
-      $share->save();
+		$data = array();
+		$data[1]= $request->get('Name');
+		$data[2]= $request->get('Email');
+		$data[3] = $request->get('type');
+	    $this->userRepository->update($data, $id);
 	  
 	  Session::flash('message', 'You just made a cool edit to the profile.');
 	  return redirect('Home2');
@@ -195,7 +159,7 @@ class UserController extends Controller
 	public function Profil($slug) {
 		
 		$idd = DB::table('users')->where('slug',$slug)->value('id');
-		$share = User::find($idd);
+		$share =  $this->userRepository->find($idd);
         return view('user.profil', compact('share'));
 
     }

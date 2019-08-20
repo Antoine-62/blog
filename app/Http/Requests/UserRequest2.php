@@ -33,7 +33,7 @@ class UserRequest2 extends FormRequest
 	{
 		return [
 			'Name.required' => 'The name of the User is required',
-			'Email.min' => 'The email of the user is required',
+			'Email.required' => 'The email of the user is required',
 		];
 	}
 }

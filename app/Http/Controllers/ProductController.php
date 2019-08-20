@@ -17,13 +17,22 @@ use Illuminate\Support\Facades\File;
 use Session;
 use Illuminate\Support\Facades\Hash;
 use Auth;
-use url_aliases;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Str;
+use App\Repositories\ProductRepositoryInterface;
 
 class ProductController extends Controller
 {
+	
+	private $productRepository;
+	
+    public function __construct(ProductRepositoryInterface $productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
+	
+	
     public function Index() {
 
         return view("product.hello");
@@ -37,28 +46,11 @@ class ProductController extends Controller
 	public function Authentif() {
 
         return view("product.Auth");
-    }
-	
-	public function Confirmation() {
-
-        return view("product.conf");
-    }
-	
-		public function Confirmation2() {
-
-        return view("product.conf2");
-    }
-	
-	public function Confirmation3() {
-
-        return view("product.conf3");
-    }
-	
-	
+    }	
 	
 	 public function Display() {
        
-	    $shares = _product::all();
+	    $shares = $this->productRepository->all();
 		$productQs = DB::table('_product_q')->orderBy('id', 'desc')->get();
 		$fils = DB::table('files')->orderBy('id', 'desc')->get();
         return view('product.display', compact('shares','productQs','fils'));
@@ -66,30 +58,6 @@ class ProductController extends Controller
 	
 	
 	  public function storeMemberadd(ProductRequest2 $request) {	
-
-	  $slug = str_slug($request->get('FirstName'));
-	  $uest=DB::table('_product')->where('slug',$slug)->count();
-	  $count=1;
-	  while($uest>0)
-	  {
-			$count = $count +1;
-			$count2 = '_'.$count;
-			$slug = str_slug($request->get('FirstName')).$count2;
-			$uest=DB::table('_product')->where('slug',$slug)->count();
-	  }
-	  
-      $share = new _product;
-	  $share->Title = $request->get('Title');
-      $share->FirstName = $request->get('FirstName');
-      $share->LastName=$request->get('LastName');
-	  $share->Birth = $request->get('Birth');
-      $share->City=$request->get('City');
-	  $share->Country = $request->get('Country');
-      $share->Mail= $request->get('Mail');
-	  $share->Phone= $request->get('Phone');
-	  $share->PreferC= $request->get('PreferC');
-	  $share->Uid = Auth::user()->id;
-	  $share->slug = $slug;
 	  
 	  #To store the file and create resize image
 	  $file=$request->fileU;//we get the image
@@ -97,11 +65,21 @@ class ProductController extends Controller
 	  $image_resize = Image::make($file->getRealPath());  	//We create a second image from the image	
 	  $image_resize->resize(300, 300);//we resize the image
 	  $image_resize->save(public_path('uploads/Image-Resize/' .$filename));//we store the 2nd image in a specific directory
-	  $file->move(public_path('/uploads'), $filename);//we store the 1rst image in uploads directory
-      $share->filename = $filename;	 //we enter the name of the image in the database
+	  $file->move(public_path('/uploads'), $filename);//we store the 1rst image in uploads directory  
 	  
-	  
-      $share->save();
+	  $data = array();
+	  $data[1]= $request->get('Title');
+	  $data[2]= $request->get('FirstName');
+      $data[3]= $request->get('LastName');
+	  $data[4] = $request->get('Birth');
+	  $data[5] =$request->get('City');
+	  $data[6] = $request->get('Country');
+	  $data[7] =  $request->get('Mail');
+	  $data[8] = $request->get('Phone');
+	  $data[9] = $request->get('PreferC');
+	  $data[10] = Auth::user()->id;
+	  $data[11] = $filename;	 //we enter the name of the image in the database
+	  $this->productRepository->create($data);
 	  
 	  Session::flash('message', 'Congratulations, you create a new member!');
 	  return redirect('display-Member');
@@ -114,10 +92,10 @@ class ProductController extends Controller
 	/*For the member(yes It's no clear with the user, soory)*/
 	public function deleteMember($id) {
 		
-	  $share = _product::findOrFail($id);	
+	  $share = $this->productRepository->find($id);	
 	 // Storage::delete($share->filename);
 	  File::delete("uploads/".$share->filename);
-	  $share->delete();
+	  $this->productRepository->delete($id);
 
 	  Session::flash('message', 'Congratulations, you deleted a product');
 	  return redirect('display-Member');
@@ -135,46 +113,19 @@ class ProductController extends Controller
 	
 	public function updateMember(ProductRequest $request, $id) {
 		
-	  $slug = str_slug($request->get('FirstName'));
-	  $uest=DB::table('_product')->where('slug',$slug)->count();
-	  $count=1;
-	  if(DB::table('_product')->where('id',$id)->value('slug')==$slug)
-	  {
-			$uest=$uest-1;
-      }
-	  while($uest>0)
-	  {
-			$count = $count +1;
-			$count2 = '_'.$count;
-			$slug = str_slug($request->get('FirstName')).$count2;
-			$uest=DB::table('_product')->where('slug',$slug)->count();
-	  }
+      $data = array();
+	  $data[1] = $request->get('Title');
+      $data[2] = $request->get('FirstName');
+      $data[3]=$request->get('LastName');
+	  $data[4] = $request->get('Birth');
+      $data[5]=$request->get('City');
+	  $data[6] = $request->get('Country');
+      $data[7]= $request->get('Mail');
+	  $data[8]= $request->get('Phone');
+	  $data[9]= $request->get('PreferC');
+	  $data[10]=$request->file('fileU');
+	  $this->productRepository->update($data,$id);
 	
-      $share = _product::find($id);
-	  $share->Title = $request->get('Title');
-      $share->FirstName = $request->get('FirstName');
-      $share->LastName=$request->get('LastName');
-	  $share->Birth = $request->get('Birth');
-      $share->City=$request->get('City');
-	  $share->Country = $request->get('Country');
-      $share->Mail= $request->get('Mail');
-	  $share->Phone= $request->get('Phone');
-	  $share->PreferC= $request->get('PreferC');
-	  $share->slug=$slug;
-	  if( $request->file('fileU') !== null)
-	  {
-			//Storage::delete($share->filename);
-			File::delete("uploads/".$share->filename);
-			//$filename = $request->file('fileU')->storeAs('files',date('d-m-Y H:i:s',time()) . '-' . $request->fileU->getClientOriginalName());
-			$file=$request->fileU;
-			$filename = date(time()) . '-' . $file->getClientOriginalName();
-			$image_resize = Image::make($file->getRealPath());  		
-			$image_resize->resize(300, 300);
-			$image_resize->save(public_path('uploads/Image-Resize/' .$filename));
-			$file->move(public_path('/uploads'), $filename);
-			$share->filename = $filename;
-	  }
-      $share->save();
 	  Session::flash('message', 'You just made a cool edit to your product.');
 	  return redirect('display-Member');
 
