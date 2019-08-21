@@ -24,15 +24,18 @@ use FFMpeg;
 use App\url_aliases;
 use Hashids\Hashids;
 use App\Repositories\UserRepositoryInterface;
+use App\Repositories\PermissionRepositoryInterface;
 
 
 class UserController extends Controller
 {
 	private $userRepository;
+	private $permissionRepository;
 	
-	 public function __construct(UserRepositoryInterface $userRepository)
+	 public function __construct(UserRepositoryInterface $userRepository, PermissionRepositoryInterface $permissionRepository)
     {
         $this->userRepository = $userRepository;
+		$this->permissionRepository = $permissionRepository;
     }
 	
 	public function IndexA() {
@@ -81,48 +84,13 @@ class UserController extends Controller
 	/*For the user*/
 	public function deleteUser($id) {
 		
-	$formerName =DB::table('users')
-				->where('id', $id)
-				->value('VideoName');
+		$this->userRepository->deleteVideo($id);
 	
-			
-	File::delete( $formerName);
-
-			
-			
-	$formerName =DB::table('users')
-				->where('id', $id)
-				->value('VideoName2');
-	
-			
-	File::delete( $formerName);
-	
-	$formerName =DB::table('users')
-				->where('id', $id)
-				->value('VideoName3');
-	
-			
-	File::delete( $formerName);
-	
-	$formerName =DB::table('users')
-				->where('id', $id)
-				->value('VideoName4');
-	
-			
-	File::delete( $formerName);
-	
-	$formerName =DB::table('users')
-				->where('id', $id)
-				->value('VideoName5');
-	
-			
-	File::delete( $formerName);
-	
-		$permission = DB::table('permission')->where('user_id',$id)->value('id');
+		$permission = $this->permissionRepository->find($id);
 		while(isset($permission))
 		{
-			DB::table('permission')->where('id',$permission)->delete();
-			$permission = DB::table('permission')->where('user_id',$id)->value('id');
+			$this->permissionRepository->delete($id);
+			$permission = $this->permissionRepository->find($id);
 		}
 		
 	  $this->userRepository->delete($id);

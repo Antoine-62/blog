@@ -3,6 +3,7 @@ namespace App\Repositories;
  
 use App\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
  
 class DbUserRepository implements UserRepositoryInterface {
 	
@@ -14,6 +15,43 @@ class DbUserRepository implements UserRepositoryInterface {
 	public function find($id)
 	{
 		return User::find($id);
+	}
+	
+	public function deleteVideo($id)
+	{
+		$formerName =DB::table('users')
+				->where('id', $id)
+				->value('VideoName');
+	
+			
+		File::delete( $formerName);
+	
+		$formerName =DB::table('users')
+				->where('id', $id)
+				->value('VideoName2');
+	
+			
+		File::delete( $formerName);
+	
+		$formerName =DB::table('users')
+				->where('id', $id)
+				->value('VideoName3');
+	
+			
+		File::delete( $formerName);
+	
+		$formerName =DB::table('users')
+				->where('id', $id)
+				->value('VideoName4');
+	
+			
+		File::delete( $formerName);
+	
+		$formerName =DB::table('users')
+				->where('id', $id)
+				->value('VideoName5');
+		
+		File::delete( $formerName);
 	}
 	
 

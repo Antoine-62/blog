@@ -14,13 +14,17 @@ use Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
-
+use App\Repositories\BasicPageRepositoryInterface;
 
 class AdminController extends Controller
 {
 	
 	private $globalV=5;
-	
+	private $basicPageRepository;
+	 public function __construct(BasicPageRepositoryInterface $basicPageRepository)
+    {
+        $this->basicPageRepository = $basicPageRepository;
+    }
 	
 	//to get the form of banner Image
     public function FormBanIm() {
@@ -46,8 +50,8 @@ class AdminController extends Controller
     }
 	
 	public function home() {
-		session(['key' => '13']);
-        $shares = DB::table('basic_page')->where('NamePage','Home')->get();
+		//session(['key' => '13']);
+        $shares = $this->basicPageRepository->home();
         return view('admin.home2', compact('shares'));
     }
 	
@@ -73,14 +77,14 @@ class AdminController extends Controller
 	
 	public function ContactUs() {
 
-        $shares = DB::table('basic_page')->where('NamePage','Contact')->get();
+        $shares = $this->basicPageRepository->contact();
         return view('admin.Contact-us', compact('shares'));
 		
     }
 	
 	public function AboutUs() {
 
-        $shares = DB::table('basic_page')->where('NamePage','About')->get();
+        $shares = $this->basicPageRepository->about();
         return view('admin.About-us', compact('shares'));
     }
 	
@@ -98,24 +102,13 @@ class AdminController extends Controller
     }
 	
 	public function storeBasP(AdminRequest $request, $Home) {
-		
-		$slug = str_slug($Home.' '.$request->get('NamePage').' '.$request->get('Title'));
-		$uest=DB::table('basic_page')->where('slug',$slug)->count();
-		$count=1;
-		while($uest>0)
-		{
-			$count = $count +1;
-			$count2 = '_'.$count;
-			$slug = str_slug($Home.' '.$request->get('Title')).$count2;
-			$uest=DB::table('basic_page')->where('slug',$slug)->count();
-		}
 
-		DB::table('basic_page')->insertGetId(
-			['Title' => $request->get('Title'),
-			 'Content' => $request->get('Content'),
-			 'NamePage'=>$Home,
-			 'slug'=>$slug
-			 ]);
+		$data = array();
+	    $data[1]= $request->get('Title');
+	    $data[2]= $request->get('Content');
+        $data[3]= $Home;
+		$this->basicPageRepository->create($data);
+		
 	  
 	  Session::flash('message', 'Congratulations, you added a basic Page!');
 	  $page = $Home;
@@ -131,7 +124,7 @@ class AdminController extends Controller
 	
 	public function deleteBasicCont($id) {
 		
-	  $content = DB::table('basic_page')->where('id', $id)->delete();
+	  $this->basicPageRepository->delete($id);
 	  Session::flash('message', "You deleted a basic content");
       return  redirect()->back();
     }
@@ -145,30 +138,10 @@ class AdminController extends Controller
 			/*Basic Page Edit*/
 	public function updateBasicPage(AdminRequest $request, $id) {
 		
-		$home=DB::table('basic_page')->where('id',$id)->value('NamePage');
-		$slug = str_slug($home.' '.$request->get('Title'));
-		$uest=DB::table('basic_page')->where('slug',$slug)->count();
-		if(DB::table('basic_page')->where('id',$id)->value('slug')==$slug)
-		{
-			$uest=$uest-1;
-		}
-		$count=1;
-		while($uest>0)
-		{
-			$count = $count +1;
-			$count2 = '_'.$count;
-			$slug = str_slug($home.' '.$request->get('Title')).$count2;
-			$uest=DB::table('basic_page')->where('slug',$slug)->count();
-		}
-		
-		DB::table('basic_page')
-				->where('id', $id)
-				->update([
-				'Title' => $request->get('Title'),
-				'Content' => $request->get('Content'),
-				'slug' => $slug
-				]);
-				
+		$data = array();
+	    $data[1]= $request->get('Title');
+	    $data[2]= $request->get('Content');
+		$this->basicPageRepository->update($data, $id);		
 	
 	  Session::flash('message', "You edit your content");
 	  $page = DB::table('basic_page')->where('id', $id)->value('NamePage');
@@ -178,7 +151,7 @@ class AdminController extends Controller
 	  if($page == 'Home')
       return  redirect('Home2');
   
-  if($page == 'Contact')
+	  if($page == 'Contact')
       return  redirect('Contact-us');
     }
 	

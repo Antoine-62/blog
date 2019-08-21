@@ -1,13 +1,11 @@
 <?php
 namespace App\Repositories;
  
-interface UserRepositoryInterface {
+interface PermissionRepositoryInterface {
 	
 	public function all();
 	
 	public function find($id);
-	
-	public function deleteVideo($id);
 
     public function create(array $data);
 

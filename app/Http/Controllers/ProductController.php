@@ -21,17 +21,20 @@ use Illuminate\Support\Facades\DB;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Str;
 use App\Repositories\ProductRepositoryInterface;
+use App\Repositories\ProductQRepositoryInterface;
+
 
 class ProductController extends Controller
 {
 	
 	private $productRepository;
+	private $productQRepository;
 	
-    public function __construct(ProductRepositoryInterface $productRepository)
+    public function __construct(ProductRepositoryInterface $productRepository,ProductQRepositoryInterface $productQRepository)
     {
         $this->productRepository = $productRepository;
+		$this->productQRepository = $productQRepository;
     }
-	
 	
     public function Index() {
 
@@ -51,7 +54,7 @@ class ProductController extends Controller
 	 public function Display() {
        
 	    $shares = $this->productRepository->all();
-		$productQs = DB::table('_product_q')->orderBy('id', 'desc')->get();
+		$productQs = $this->productQRepository->all();
 		$fils = DB::table('files')->orderBy('id', 'desc')->get();
         return view('product.display', compact('shares','productQs','fils'));
     }
@@ -135,44 +138,14 @@ class ProductController extends Controller
 
  public function storeProductQ(ProductQRequest $request) {
 	 
-	   
-		$slug = str_slug($request->get('Name'));
-		$uest=DB::table('_product_q')->where('slug',$slug)->count();
-		$count=1;
-		while($uest>0)
-		{
-			$count = $count +1;
-			$count2 = '_'.$count;
-			$slug = str_slug($request->get('Name')).$count2;
-			$uest=DB::table('_product_q')->where('slug',$slug)->count();
-		}
-	 
-		DB::table('_product_q')->insertGetId(
-			['Name' => $request->get('Name'),
-			 'Category' => $request->get('Category'),
-			 'Price'=> $request->get('Price'),
-			 'ProductS'=> $request->get('ProductS'),
-			 'Uid'=> Auth::user()->id,
-			 'slug'=>$slug
-			 ]
-		);
-		
-		//$iddb=DB::table('_product_q')->where('Name',$request->get('Name'))->get();
-		$files = $request->file('photos');
-		
-		foreach($files as $file){	
-		$idd = DB::table('_product_q')->where('slug',$slug)->value('id');
-		$filename    = date(time()) . '-' . $file->getClientOriginalName();
-		$image_resize = Image::make($file->getRealPath());  		
-		$image_resize->resize(300, 300);
-		$image_resize->save(public_path('uploads/Image-Resize/' .$filename));
-		$file->move(public_path('/uploads'), $filename);
-		DB::table('files')->insertGetId(
-		 ['name' =>  $filename,
-		 'productQ_id'=>$idd]);
-		 
-		}
-		
+	    $data = array();
+	    $data[1] = $request->get('Name');
+        $data[2] = $request->get('Category');
+        $data[3]=$request->get('Price');
+	    $data[4] = $request->get('ProductS');
+        $data[5]= Auth::user()->id;
+	    $data[6]=$request->file('photos');
+	    $this->productQRepository->create($data);
 	  
 	  Session::flash('message', 'Congratulations, you create a new Product!');
 	  return redirect('display-Member');
@@ -189,61 +162,15 @@ class ProductController extends Controller
 	/*ProductQ update*/
 	public function updatePoductQ(ProductQRequest2 $request, $id) {
 		
-		$slug = str_slug($request->get('Name'));
-		$uest=DB::table('_product_q')->where('slug',$slug)->count();
-		$count=1;
-		if(DB::table('_product_q')->where('id',$id)->value('slug')==$slug)
-	    {
-			$uest=$uest-1;
-        }
-		while($uest>0)
-		{
-			$count = $count +1;
-			$count2 = '_'.$count;
-			$slug = str::slug($request->get('Name')).$count2;
-			$uest=DB::table('faq')->where('slug',$slug)->count();
-		}
-
-		 if( $request->file('photos') !== null)
-		{
 		
-			DB::table('_product_q')
-				->where('id', $id)
-				->update(['Name' => $request->get('Name'),
-				'Category' => $request->get('Category'),
-				'Price'=> $request->get('Price'),
-				'ProductS'=> $request->get('ProductS'),
-				'slug'=>$slug,
-				]);
-			$files = $request->file('photos');
+	    $data = array();
+	    $data[1] = $request->get('Name');
+        $data[2] = $request->get('Category');
+        $data[3]=$request->get('Price');
+	    $data[4] = $request->get('ProductS');
+	    $data[5]=$request->file('photos');
+	    $this->productQRepository->update($data,$id);
 		
-			foreach($files as $file){	
-			$idd = DB::table('_product_q')->where('Name',$request->get('Name'))->value('id');
-			$filename = date(time()) . '-' . $file->getClientOriginalName();
-			$image_resize = Image::make($file->getRealPath());  		
-			$image_resize->resize(300, 300);
-			$image_resize->save(public_path('uploads/Image-Resize/' .$filename));
-			$file->move(public_path('/uploads'), $filename);
-		 
-			DB::table('files')->insertGetId(
-			['name' =>  $filename,
-			'productQ_id'=>$idd]);
-		 
-			}
-		}
-		else
-			{
-			DB::table('_product_q')
-				->where('id', $id)
-				->update([
-				'Name' => $request->get('Name'),
-				'Category' => $request->get('Category'),
-				'Price'=> $request->get('Price'),
-				'ProductS'=> $request->get('ProductS'),
-				'slug'=>$slug,
-				]);
-		}
-
     	Session::flash('message', 'You edit your ProductQ.');
 	    return redirect('display-Member');
 
@@ -251,19 +178,9 @@ class ProductController extends Controller
 	
 	public function deleteProductQ($id) {
 		
-			$files = DB::table('files')->where('productQ_id', $id)->get();
-			foreach($files as $fil)
-			{
-					File::delete("uploads/".$fil->id);
-					DB::table('files')->where('id', $fil->id)->delete();
-					
-			}
-			$user_profile = DB::table('_product_q')->where('id', $id)->delete();
-
-
-	  Session::flash('message', 'You deleted your ProductQ');
-	  
-	  return redirect('display-Member');
+		$this->productQRepository->delete($id);
+	    Session::flash('message', 'You deleted your ProductQ');
+	    return redirect('display-Member');
     }
 	
 	public function deleteImageProductQ($id) {

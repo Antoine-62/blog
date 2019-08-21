@@ -9,7 +9,7 @@ ffmpeg version N-94377-g817235b195 Copyright (c) 2000-2019 the FFmpeg developers
   libswscale      5.  6.100 /  5.  6.100
   libswresample   3.  6.100 /  3.  6.100
   libpostproc    55.  6.100 / 55.  6.100
-Input #0, matroska,webm, from '1566372975-3-62.webm':
+Input #0, matroska,webm, from '1566372935-2-62.webm':
   Metadata:
     encoder         : QTmuxingAppLibWebM-0.0.1
   Duration: N/A, start: -0.001000, bitrate: N/A
@@ -19,9 +19,9 @@ Stream mapping:
   Stream #0:0 -> #0:0 (vp8 (native) -> vp9 (libvpx-vp9))
   Stream #0:1 -> #0:1 (opus (native) -> opus (libopus))
 Press [q] to stop, [?] for help
-[libopus @ 000001e497cfe480] No bit rate set. Defaulting to 64000 bps.
-[libvpx-vp9 @ 000001e497cfcac0] v1.8.0-606-gd749bc7b3
-Output #0, webm, to 'uploads/video/1566372975-3-62.webm':
+[libopus @ 000002075257e740] No bit rate set. Defaulting to 64000 bps.
+[libvpx-vp9 @ 000002075264dd40] v1.8.0-606-gd749bc7b3
+Output #0, webm, to 'uploads/video/1566372935-2-62.webm':
   Metadata:
     encoder         : Lavf58.30.100
     Stream #0:0(eng): Video: vp9 (libvpx-vp9), yuv420p, 640x360 [SAR 1:1 DAR 16:9], q=-1--1, 1k fps, 1k tbn, 1k tbc (default)
@@ -32,5 +32,5 @@ Output #0, webm, to 'uploads/video/1566372975-3-62.webm':
     Stream #0:1(eng): Audio: opus (libopus), 48000 Hz, mono, flt, 64 kb/s (default)
     Metadata:
       encoder         : Lavc58.55.100 libopus
-frame=   68 fps=0.0 q=0.0 size=       1kB time=00:00:02.48 bitrate=   2.7kbits/s speed=4.83x    frame=  113 fps=107 q=0.0 size=       1kB time=00:00:03.98 bitrate=   1.7kbits/s speed=3.76x    frame=  121 fps= 92 q=0.0 Lsize=     242kB time=00:00:04.18 bitrate= 474.0kbits/s speed=3.19x    
-video:201kB audio:38kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 1.284751%
+frame=   42 fps=0.0 q=0.0 size=       1kB time=00:00:01.56 bitrate=   4.2kbits/s speed=3.04x    frame=   73 fps= 65 q=0.0 Lsize=     171kB time=00:00:02.88 bitrate= 486.9kbits/s speed=2.55x    
+video:141kB audio:28kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 1.367210%
