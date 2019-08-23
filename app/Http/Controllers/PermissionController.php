@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Session;
 use App\Repositories\PermissionRepositoryInterface;
+use App\Http\Resources\permissionsResource;
 
 class PermissionController extends Controller
 {
@@ -54,10 +55,16 @@ class PermissionController extends Controller
 	
 	public function EditPermission($slug){
 	
-		$permission = DB::table('permission')->where('slug',$slug)->first();
+		$permission = $this->permissionRepository->getPermission($slug);
 		$shares = DB::table('users')->join('role_user', 'users.id', '=', 'role_user.user_id')->where('role_id','2')->orderBy('role_user.id', 'asc')->get('users.*');
 		$basics = DB::table('basic_page')->orderBy('id', 'asc')->get();
         return view("Permission.EditPermission", compact('permission', 'shares', 'basics'));
+	}
+	
+	public function show()
+	{
+		 $posts = $this->permissionRepository->all();
+		 return new permissionsResource($posts);
 	}
 	
 	public function UpdatePermission(Request $request, $id){	

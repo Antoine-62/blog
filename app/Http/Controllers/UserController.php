@@ -25,6 +25,8 @@ use App\url_aliases;
 use Hashids\Hashids;
 use App\Repositories\UserRepositoryInterface;
 use App\Repositories\PermissionRepositoryInterface;
+use App\Http\Resources\UserRessource;
+use App\Http\Resources\UsersResource;
 
 
 class UserController extends Controller
@@ -61,6 +63,12 @@ class UserController extends Controller
 	    $shares = $this->userRepository->all();
         return view('user.Displ-users', compact('shares'));
     }
+	
+	public function showall()
+	{
+		 $posts = $this->userRepository->all();
+		 return new UsersResource($posts);
+	}
 	
 	/*If the admin want to add a new user*/
 	public function storeUseradm(UserRequest $request) {
@@ -110,6 +118,15 @@ class UserController extends Controller
 		return view('user.EditU', compact('share'));
 		
     }
+	
+	/*Test json responses*/
+	
+	public function show($slug)
+	{
+		 $posts = DB::table('users')->where('slug',$slug)->first();
+		 return new UserRessource($posts);
+	}
+	
 	
 	public function updateUser(UserRequest2 $request, $id) {
 		
@@ -276,11 +293,8 @@ class UserController extends Controller
 		
 		//Then we store the video no compressing in the server and database
 		//in the waiting of the process to compress video in  back-end(which can take many time)
-		DB::table('users')
-				->where('id', $id)
-				->update(['VideoName'.$i =>$filename1,
-				]);	
-				
+		
+		$this->userRepository->newVideo($id,$i,$filename1);
 		
 		//And only now we begin to compress video
 		$ffmpeg = FFMpeg\FFMpeg::create(array( 

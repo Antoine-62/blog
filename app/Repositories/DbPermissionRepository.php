@@ -17,6 +17,12 @@ class DbPermissionRepository implements PermissionRepositoryInterface {
 	{
 		return DB::table('permission')->where('user_id',$id)->value('id');
 	}
+	
+	public function getPermission($slug)
+	{
+		return DB::table('permission')->where('slug',$slug)->first();
+	}
+	
     public function create(array $data)
 	{
 		  DB::table('permission')->insertGetId(

@@ -14,7 +14,11 @@ class DbFaqRepository implements FaqRepositoryInterface {
 		return DB::table('faq')->orderBy('id', 'desc')->get();
 	}
 	
-
+	public function findEdit($slug)
+	{
+		return DB::table('faq')->where('slug',$slug)->first();
+	}
+	
     public function create(array $data)
 	{
 		if($data[3] == null){

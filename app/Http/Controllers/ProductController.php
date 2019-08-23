@@ -22,6 +22,8 @@ use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Str;
 use App\Repositories\ProductRepositoryInterface;
 use App\Repositories\ProductQRepositoryInterface;
+use App\Http\Resources\productqRessource;
+use App\Http\Resources\productRessource;
 
 
 class ProductController extends Controller
@@ -113,6 +115,14 @@ class ProductController extends Controller
 		return view('product.Edit', compact('share'));
     }
 	
+	/*Test json responses*/
+	
+	public function show2($slug)
+	{
+		 $posts = DB::table('_product')->where('slug',$slug)->first();
+		 return new productRessource($posts);
+	}
+	
 	
 	public function updateMember(ProductRequest $request, $id) {
 		
@@ -158,6 +168,14 @@ class ProductController extends Controller
 		$fils = DB::table('files')->where('productQ_id',$productQs->id)->get();
 		return view('product.EditQ', compact('productQs','fils'));
     }
+	
+	/*Test json responses*/
+	
+	public function show($slug)
+	{
+		 $posts = DB::table('_product_q')->where('slug',$slug)->first();
+		 return new productqRessource($posts);
+	}
 	
 	/*ProductQ update*/
 	public function updatePoductQ(ProductQRequest2 $request, $id) {

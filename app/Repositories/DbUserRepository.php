@@ -17,6 +17,14 @@ class DbUserRepository implements UserRepositoryInterface {
 		return User::find($id);
 	}
 	
+	public function newVideo($id, $i, $filename1)
+	{
+		DB::table('users')
+				->where('id', $id)
+				->update(['VideoName'.$i =>$filename1,
+				]);	
+	}
+	
 	public function deleteVideo($id)
 	{
 		$formerName =DB::table('users')

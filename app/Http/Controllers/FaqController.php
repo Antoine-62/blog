@@ -7,6 +7,8 @@ use Session;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\faqtRequest;
 use App\Repositories\FaqRepositoryInterface;
+use App\Http\Resources\faqsResource;
+
 
 class FaqController extends Controller
 {
@@ -15,6 +17,7 @@ class FaqController extends Controller
     {
         $this->faqRepository = $faqRepository;
     }
+	
 	
      public function getFaqForm() {
 
@@ -39,9 +42,15 @@ class FaqController extends Controller
 	  return redirect('faq');
     }
 	
+	public function show()
+	{
+		 $posts = $this->faqRepository->all();
+		 return new faqsResource($posts);
+	}
+	
 	public function editFaq($slug) {
 		
-		$share = DB::table('faq')->where('slug',$slug)->first();
+		$share = $this->faqRepository->findEdit($slug);
         return view("faq.faq-form-edit", compact('share'));
     }
 	

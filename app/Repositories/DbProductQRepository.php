@@ -16,7 +16,7 @@ class DbProductQRepository implements ProductQRepositoryInterface {
 	
 	public function find($id)
 	{
-		return _product::find($id);
+		return _product_q::find($id);
 	}
 	
 

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\BasicPageRepositoryInterface;
+use App\Http\Resources\basicPagesResource;
 
 class AdminController extends Controller
 {
@@ -55,6 +56,12 @@ class AdminController extends Controller
         return view('admin.home2', compact('shares'));
     }
 	
+	public function showHome()
+	{		
+		 $posts = $this->basicPageRepository->home();
+		 return new basicPagesResource($posts);
+	}
+	
 	public function GlobalPage() {
 		
         $value = config('Global-Variable.test');
@@ -82,11 +89,22 @@ class AdminController extends Controller
 		
     }
 	
+	public function showContact()
+	{		
+		 $posts = $this->basicPageRepository->contact();
+		 return new basicPagesResource($posts);
+	}
+	
 	public function AboutUs() {
-
         $shares = $this->basicPageRepository->about();
         return view('admin.About-us', compact('shares'));
     }
+	
+	public function showAbout()
+	{		
+		 $posts = $this->basicPageRepository->about();
+		 return new basicPagesResource($posts);
+	}
 	
 	public function storeBanIm(AdminRequest2 $request) {
 		
@@ -134,6 +152,7 @@ class AdminController extends Controller
 		$share = DB::table('basic_page')->where('slug',$slug)->first();
 		return view('admin.EditBP', compact('share'));
     }
+	
 	
 			/*Basic Page Edit*/
 	public function updateBasicPage(AdminRequest $request, $id) {
