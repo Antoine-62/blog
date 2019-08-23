@@ -1,36 +1,0 @@
-ffmpeg version N-94377-g817235b195 Copyright (c) 2000-2019 the FFmpeg developers
-  built with gcc 9.1.1 (GCC) 20190716
-  configuration: --enable-gpl --enable-version3 --enable-sdl2 --enable-fontconfig --enable-gnutls --enable-iconv --enable-libass --enable-libdav1d --enable-libbluray --enable-libfreetype --enable-libmp3lame --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libopus --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libtheora --enable-libtwolame --enable-libvpx --enable-libwavpack --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libzimg --enable-lzma --enable-zlib --enable-gmp --enable-libvidstab --enable-libvorbis --enable-libvo-amrwbenc --enable-libmysofa --enable-libspeex --enable-libxvid --enable-libaom --enable-libmfx --enable-amf --enable-ffnvcodec --enable-cuvid --enable-d3d11va --enable-nvenc --enable-nvdec --enable-dxva2 --enable-avisynth --enable-libopenmpt
-  libavutil      56. 32.100 / 56. 32.100
-  libavcodec     58. 55.100 / 58. 55.100
-  libavformat    58. 30.100 / 58. 30.100
-  libavdevice    58.  9.100 / 58.  9.100
-  libavfilter     7. 58.100 /  7. 58.100
-  libswscale      5.  6.100 /  5.  6.100
-  libswresample   3.  6.100 /  3.  6.100
-  libpostproc    55.  6.100 / 55.  6.100
-Input #0, matroska,webm, from '1565679904-2-10.webm':
-  Metadata:
-    encoder         : QTmuxingAppLibWebM-0.0.1
-  Duration: N/A, start: -0.001000, bitrate: N/A
-    Stream #0:0(eng): Video: vp8, yuv420p(progressive), 640x360, SAR 1:1 DAR 16:9, 16.67 fps, 16.67 tbr, 1k tbn, 1k tbc (default)
-    Stream #0:1(eng): Audio: opus, 48000 Hz, mono, fltp (default)
-Stream mapping:
-  Stream #0:0 -> #0:0 (vp8 (native) -> vp9 (libvpx-vp9))
-  Stream #0:1 -> #0:1 (opus (native) -> opus (libopus))
-Press [q] to stop, [?] for help
-[libopus @ 000001d372dc58c0] No bit rate set. Defaulting to 64000 bps.
-[libvpx-vp9 @ 000001d374988280] v1.8.0-606-gd749bc7b3
-Output #0, webm, to 'uploads/video/1565679904-2-10.webm':
-  Metadata:
-    encoder         : Lavf58.30.100
-    Stream #0:0(eng): Video: vp9 (libvpx-vp9), yuv420p, 640x360 [SAR 1:1 DAR 16:9], q=-1--1, 16.67 fps, 1k tbn, 16.67 tbc (default)
-    Metadata:
-      encoder         : Lavc58.55.100 libvpx-vp9
-    Side data:
-      cpb: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: -1
-    Stream #0:1(eng): Audio: opus (libopus), 48000 Hz, mono, flt, 64 kb/s (default)
-    Metadata:
-      encoder         : Lavc58.55.100 libopus
-frame=   46 fps=0.0 q=0.0 size=       1kB time=00:00:02.98 bitrate=   2.2kbits/s speed= 5.7x    frame=   90 fps= 87 q=0.0 size=       1kB time=00:00:05.60 bitrate=   1.2kbits/s speed=5.43x    frame=  132 fps= 86 q=0.0 size=     198kB time=00:00:10.08 bitrate= 161.2kbits/s dup=0 drop=1 speed=6.58x    frame=  178 fps= 87 q=0.0 size=     343kB time=00:00:14.24 bitrate= 197.5kbits/s dup=0 drop=2 speed=6.94x    frame=  237 fps= 93 q=0.0 size=     506kB time=00:00:18.32 bitrate= 226.4kbits/s dup=0 drop=6 speed=7.16x    frame=  291 fps= 95 q=0.0 size=     639kB time=00:00:22.58 bitrate= 231.7kbits/s dup=0 drop=9 speed=7.38x    frame=  349 fps= 98 q=0.0 size=     817kB time=00:00:26.46 bitrate= 252.9kbits/s dup=0 drop=9 speed=7.43x    frame=  432 fps=106 q=0.0 size=     944kB time=00:00:32.68 bitrate= 236.6kbits/s dup=0 drop=9 speed=8.05x    frame=  502 fps=110 q=0.0 size=    1106kB time=00:00:37.60 bitrate= 241.0kbits/s dup=0 drop=9 speed=8.23x    frame=  518 fps=106 q=0.0 Lsize=    1319kB time=00:00:38.30 bitrate= 282.1kbits/s dup=0 drop=9 speed=7.86x    
-video:952kB audio:349kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 1.352622%
